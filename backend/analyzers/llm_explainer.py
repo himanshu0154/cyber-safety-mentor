@@ -21,19 +21,29 @@ def _template_explanation(input_type: str, result: dict) -> str:
     indicators = result["detected_indicators"]
 
     if level in ("HIGH", "CRITICAL"):
-        opening = f"This {input_type.lower()} shows strong signs of being a {threat.lower()} attempt."
+        opening = (
+            f"This {input_type.lower()} is high risk and may be a "
+            f"{threat.lower()}."
+        )
     elif level == "MEDIUM":
-        opening = f"This {input_type.lower()} has some suspicious characteristics worth double-checking."
+        opening = (
+            f"This {input_type.lower()} has some suspicious "
+            f"characteristics and should be checked carefully."
+        )
     else:
-        opening = f"This {input_type.lower()} looks mostly safe based on our checks."
+        opening = (
+            f"This {input_type.lower()} does not show major warning "
+            f"signs based on our current checks."
+        )
 
-    indicator_text = "; ".join(indicators)
+    indicator_text = ", ".join(indicators)
+
     return (
-        f"{opening} We flagged the following: {indicator_text}. "
-        f"Our confidence this is phishing is {int(result['phishing_probability'] * 100)}%. "
+        f"{opening} "
+        f"We detected: {indicator_text}. "
+        f"Risk score: {result['risk_score']}/100. "
         f"{result['recommendation']}"
     )
-
 
 def _llm_call(input_type: str, content: str, result: dict) -> str:
     """

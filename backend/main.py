@@ -23,8 +23,8 @@ from models import (
 from analyzers.classifier import detect_input_type
 
 # --- swap this single import line once the real ML module is ready ---
-from analyzers.mock_engine import analyze_text, analyze_url
-# from analyzers.real_engine import analyze_text, analyze_url
+# from analyzers.mock_engine import analyze_text, analyze_url
+from analyzers.real_engine import analyze_text, analyze_url
 # -----------------------------------------------------------------------
 
 from analyzers.llm_explainer import generate_explanation

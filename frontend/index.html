@@ -956,284 +956,181 @@
 
     /* MOCK ANALYSIS */
 
-    function analyze() {
+  async function analyze() {
 
-      const input =
-        document.getElementById("userInput").value.trim();
+  const input =
+    document.getElementById("userInput").value.trim();
 
-      if (!input) return;
+  if (!input) return;
 
+  const loading =
+    document.getElementById("loading");
 
-      const loading =
-        document.getElementById("loading");
+  const results =
+    document.getElementById("results");
 
-      const results =
-        document.getElementById("results");
+  const analyzeBtn =
+    document.getElementById("analyzeBtn");
 
-      const analyzeBtn =
-        document.getElementById("analyzeBtn");
+  results.style.display = "none";
+  loading.style.display = "block";
+  analyzeBtn.disabled = true;
 
+  try {
 
-      results.style.display = "none";
+    let endpoint;
+    let body;
 
-      loading.style.display = "block";
+    if (selectedType === "website") {
 
-      analyzeBtn.disabled = true;
+      endpoint = "http://127.0.0.1:8000/analyze/url";
 
+      body = {
+        url: input
+      };
 
-      /*
-        MOCK BACKEND DELAY
+    } else {
 
-        Later this section will be replaced
-        with a fetch() REST API request.
-      */
+      endpoint = "http://127.0.0.1:8000/analyze/message";
 
-      setTimeout(function() {
-
-        let data;
-
-
-        if (selectedType === "sms") {
-
-          data = {
-
-            risk: "High",
-
-            score: 92,
-
-            threat: "Phishing",
-
-            warnings: [
-              "Creates a sense of urgency",
-              "Requests sensitive information",
-              "Contains a suspicious link",
-              "Uses threatening language"
-            ],
-
-            explanation:
-              "This message shows several common phishing indicators. The sender is trying to create urgency and encourage you to click a link or provide sensitive information.",
-
-            action:
-              "Do not click the link. Do not share passwords, OTPs, or banking details. Verify the message through the organization's official website or app."
-
-          };
-
-        }
-
-
-        else if (selectedType === "email") {
-
-          data = {
-
-            risk: "Medium",
-
-            score: 67,
-
-            threat: "Suspicious Email",
-
-            warnings: [
-              "Unexpected request",
-              "Sender identity is unclear",
-              "Pressure to take immediate action"
-            ],
-
-            explanation:
-              "The email contains some suspicious characteristics. The request should be independently verified before you respond or open any attachments.",
-
-            action:
-              "Verify the sender and contact the organization through an official channel before taking action."
-
-          };
-
-        }
-
-
-        else {
-
-          data = {
-
-            risk: "Low",
-
-            score: 18,
-
-            threat: "No Major Threat Detected",
-
-            warnings: [
-              "No obvious phishing indicators detected",
-              "URL format appears normal"
-            ],
-
-            explanation:
-              "The URL does not currently show strong indicators of a malicious or phishing website. However, automated checks cannot guarantee that a website is completely safe.",
-
-            action:
-              "Proceed cautiously. Never enter sensitive information unless you are confident that the website is legitimate."
-
-          };
-
-        }
-
-
-        showResults(data);
-
-        loading.style.display = "none";
-
-        analyzeBtn.disabled = false;
-
-      }, 1500);
+      body = {
+        content: input,
+        input_type: selectedType.toUpperCase()
+      };
 
     }
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      throw new Error("Backend request failed");
+    }
+
+    const result = await response.json();
+
+    showResults(result);
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Could not connect to the backend. Make sure FastAPI is running."
+    );
+
+  } finally {
+
+    loading.style.display = "none";
+    analyzeBtn.disabled = false;
+
+  }
+}
 
 
     /* DISPLAY RESULTS */
 
     function showResults(data) {
 
-      const results =
-        document.getElementById("results");
+  const results =
+    document.getElementById("results");
 
-      const badge =
-        document.getElementById("riskBadge");
+  const badge =
+    document.getElementById("riskBadge");
 
-      const score =
-        document.getElementById("score");
+  const score =
+    document.getElementById("score");
 
-      const fill =
-        document.getElementById("scoreFill");
+  const fill =
+    document.getElementById("scoreFill");
 
+  results.style.display = "block";
 
-      results.style.display = "block";
+  const risk = data.risk_level.toUpperCase();
+  const scoreValue = data.risk_score;
 
+  badge.className = "risk-badge";
+  score.className = "score";
 
-      /* RISK COLORS */
+  if (risk === "HIGH" || risk === "CRITICAL") {
 
-      badge.className = "risk-badge";
+    badge.classList.add("high");
+    score.classList.add("high");
+    badge.innerText = "🔴 High Risk";
 
-      score.className = "score";
+  } else if (risk === "MEDIUM") {
 
-      fill.className = "score-fill";
+    badge.classList.add("medium");
+    score.classList.add("medium");
+    badge.innerText = "🟡 Medium Risk";
 
+  } else {
 
-      if (data.risk === "High") {
+    badge.classList.add("low");
+    score.classList.add("low");
+    badge.innerText = "🟢 Low Risk";
 
-        badge.classList.add("high");
+  }
 
-        score.classList.add("high");
+  score.innerHTML =
+    scoreValue + "<small>/100</small>";
 
-        badge.innerText = "🔴 High Risk";
+  fill.style.width = scoreValue + "%";
 
-        fill.style.background = "#e04a4a";
+  document.getElementById("threat").innerText =
+    "⚠️ " + data.threat_type;
 
-      }
+  if (scoreValue >= 80) {
 
+    document.getElementById("scoreDescription").innerText =
+      "Strong signs of a potential threat.";
 
-      else if (data.risk === "Medium") {
+  } else if (scoreValue >= 40) {
 
-        badge.classList.add("medium");
+    document.getElementById("scoreDescription").innerText =
+      "Some suspicious signs were detected.";
 
-        score.classList.add("medium");
+  } else {
 
-        badge.innerText = "🟡 Medium Risk";
+    document.getElementById("scoreDescription").innerText =
+      "No major warning signs detected.";
 
-        fill.style.background = "#e0a32c";
+  }
 
-      }
+  const warnings =
+    document.getElementById("warnings");
 
+  warnings.innerHTML = "";
 
-      else {
+  data.indicators.forEach(function(indicator) {
 
-        badge.classList.add("low");
+    const item =
+      document.createElement("div");
 
-        score.classList.add("low");
+    item.className = "warning";
 
-        badge.innerText = "🟢 Low Risk";
+    item.innerHTML =
+      "<span>!</span>" + indicator;
 
-        fill.style.background = "#27a866";
+    warnings.appendChild(item);
 
-      }
+  });
 
+  document.getElementById("explanation").innerText =
+    data.explanation;
 
-      /* SCORE */
+  document.getElementById("action").innerText =
+    data.recommendation;
 
-      score.innerHTML =
-        data.score + "<small>/100</small>";
-
-      fill.style.width =
-        data.score + "%";
-
-
-      /* THREAT */
-
-      document.getElementById("threat").innerText =
-        "⚠️ " + data.threat;
-
-
-      /* SCORE DESCRIPTION */
-
-      if (data.score >= 80) {
-
-        document.getElementById("scoreDescription").innerText =
-          "Strong signs of a potential threat.";
-
-      }
-
-      else if (data.score >= 50) {
-
-        document.getElementById("scoreDescription").innerText =
-          "Some suspicious signs were detected.";
-
-      }
-
-      else {
-
-        document.getElementById("scoreDescription").innerText =
-          "No major warning signs detected.";
-
-      }
-
-
-      /* WARNINGS */
-
-      const warnings =
-        document.getElementById("warnings");
-
-      warnings.innerHTML = "";
-
-
-      data.warnings.forEach(function(warning) {
-
-        const item =
-          document.createElement("div");
-
-        item.className = "warning";
-
-        item.innerHTML =
-          "<span>!</span>" + warning;
-
-        warnings.appendChild(item);
-
-      });
-
-
-      /* EXPLANATION */
-
-      document.getElementById("explanation").innerText =
-        data.explanation;
-
-
-      /* ACTION */
-
-      document.getElementById("action").innerText =
-        data.action;
-
-
-      /* SCROLL TO RESULTS */
-
-      results.scrollIntoView({
-        behavior: "smooth"
-      });
-
-    }
+  results.scrollIntoView({
+    behavior: "smooth"
+  });
+}
 
   </script>
 
