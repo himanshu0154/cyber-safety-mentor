@@ -1,1 +1,0 @@
-# cyber-safety-mentor
