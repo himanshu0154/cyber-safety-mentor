@@ -94,6 +94,10 @@ def analyze_message(text):
 
     indicators = detect_indicators(text)
     threat_type = detect_threat_type(text)
+    # If the model is highly suspicious but we have no
+# explainable indicators, reduce the score.
+    if not indicators and threat_type == "Unknown":
+        phishing_probability *= 0.5
 
     risk_score = phishing_probability * 100
 
