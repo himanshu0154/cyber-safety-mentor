@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Cyber Safety Mentor</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f8f6;
+      color: #17251f;
+    }
+
+    /* HEADER */
+
+    header {
+      height: 72px;
+      background: white;
+      border-bottom: 1px solid #e2ebe6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .shield {
+      width: 44px;
+      height: 44px;
+      background: #e6f7ed;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 23px;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .brand p {
+      color: #77857e;
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .language {
+      background: #f1f4f2;
+      border-radius: 9px;
+      padding: 4px;
+    }
+
+    .language button {
+      border: none;
+      background: transparent;
+      padding: 7px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #65736d;
+      font-weight: bold;
+    }
+
+    .language button.active {
+      background: white;
+      color: #16834b;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+    }
+
+    /* MAIN */
+
+    main {
+      width: 90%;
+      max-width: 900px;
+      margin: auto;
+      padding: 55px 0;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e5f7ec;
+      color: #16834b;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .hero h2 {
+      font-size: 55px;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 15px;
+    }
+
+    .hero h2 span {
+      color: #16834b;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: auto;
+      color: #6e7d75;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* ANALYZER */
+
+    .analyzer {
+      background: white;
+      border: 1px solid #e0e9e4;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 12px 35px rgba(20, 60, 40, 0.07);
+    }
+
+    .selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: #f1f5f3;
+      padding: 5px;
+      border-radius: 11px;
+      margin-bottom: 24px;
+    }
+
+    .selector button {
+      border: none;
+      background: transparent;
+      padding: 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #68766f;
+      font-size: 14px;
+    }
+
+    .selector button.active {
+      background: white;
+      color: #16834b;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.07);
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 9px;
+    }
+
+    textarea,
+    input {
+      width: 100%;
+      border: 1px solid #d8e3dd;
+      border-radius: 11px;
+      padding: 15px;
+      outline: none;
+      font-size: 14px;
+      background: #fbfdfc;
+      color: #26352e;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    textarea:focus,
+    input:focus {
+      border-color: #16834b;
+      box-shadow: 0 0 0 3px rgba(22,131,75,0.1);
+      background: white;
+    }
+
+    .input-info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 7px;
+      color: #9aa59f;
+      font-size: 10px;
+    }
+
+    .analyze {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #16834b;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .analyze:hover {
+      background: #116c3d;
+    }
+
+    .analyze:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      text-align: center;
+      color: #9aa59f;
+      font-size: 11px;
+      margin-top: 10px;
+    }
+
+    /* LOADING */
+
+    #loading {
+      display: none;
+      text-align: center;
+      margin-top: 25px;
+      color: #16834b;
+      font-weight: bold;
+    }
+
+    .loader {
+      width: 28px;
+      height: 28px;
+      border: 3px solid #d9eee2;
+      border-top-color: #16834b;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* RESULTS */
+
+    #results {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 17px;
+    }
+
+    .result-header h2 {
+      font-size: 23px;
+    }
+
+    .label {
+      color: #89968f;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .risk-badge {
+      padding: 9px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .high {
+      color: #d13b3b;
+      background: #fff0f0;
+    }
+
+    .medium {
+      color: #b87900;
+      background: #fff7df;
+    }
+
+    .low {
+      color: #16834b;
+      background: #e8f8ef;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e0e9e4;
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    .score {
+      font-size: 43px;
+      font-weight: 800;
+      margin: 12px 0;
+    }
+
+    .score small {
+      font-size: 13px;
+      color: #929d97;
+    }
+
+    .score-bar {
+      height: 7px;
+      background: #edf1ef;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      border-radius: 20px;
+    }
+
+    .score-description {
+      color: #78867f;
+      font-size: 12px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .threat-name {
+      font-size: 20px;
+      margin-top: 15px;
+    }
+
+    .warning-card,
+    .explanation-card,
+    .action-card {
+      margin-top: 15px;
+    }
+
+    .warnings {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .warning {
+      background: #fff6f6;
+      padding: 11px;
+      border-radius: 8px;
+      color: #4c5953;
+      font-size: 12px;
+    }
+
+    .warning span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 19px;
+      height: 19px;
+      background: #ffe0e0;
+      color: #d13b3b;
+      border-radius: 50%;
+      margin-right: 7px;
+      font-weight: bold;
+    }
+
+    .explanation,
+    .action {
+      display: flex;
+      gap: 14px;
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 10px;
+      background: #eaf7ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .explanation p,
+    .action p {
+      color: #596860;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    /* TIPS */
+
+    .tips {
+      margin-top: 45px;
+    }
+
+    .tips h3 {
+      text-align: center;
+      margin-bottom: 17px;
+    }
+
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .tip {
+      background: white;
+      border: 1px solid #e0e9e4;
+      border-radius: 12px;
+      padding: 17px;
+    }
+
+    .tip strong {
+      font-size: 12px;
+    }
+
+    .tip p {
+      margin-top: 7px;
+      color: #849089;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #9aa59f;
+      font-size: 10px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 650px) {
+
+      header {
+        padding: 0 20px;
+      }
+
+      .brand p {
+        display: none;
+      }
+
+      main {
+        width: 92%;
+        padding: 40px 0;
+      }
+
+      .hero h2 {
+        font-size: 40px;
+      }
+
+      .result-grid,
+      .warnings,
+      .tip-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header>
+
+    <div class="brand">
+
+      <div class="shield">🛡️</div>
+
+      <div>
+        <h1>Cyber Safety Mentor</h1>
+        <p>AI-powered cyber safety for everyone</p>
+      </div>
+
+    </div>
+
+    <div class="language">
+      <button class="active">EN</button>
+      <button>हिंदी</button>
+    </div>
+
+  </header>
+
+
+  <!-- MAIN -->
+
+  <main>
+
+    <section class="hero">
+
+      <div class="badge">
+        ✨ AI Cyber Safety Mentor
+      </div>
+
+      <h2>
+        Think before you
+        <span>click.</span>
+      </h2>
+
+      <p>
+        Check suspicious messages, emails, and websites before
+        they put your information at risk.
+      </p>
+
+    </section>
+
+
+    <!-- ANALYZER -->
+
+    <section class="analyzer">
+
+      <div class="selector">
+
+        <button
+          id="smsBtn"
+          class="active"
+          onclick="selectType('sms')"
+        >
+          💬 SMS
+        </button>
+
+        <button
+          id="emailBtn"
+          onclick="selectType('email')"
+        >
+          ✉️ Email
+        </button>
+
+        <button
+          id="websiteBtn"
+          onclick="selectType('website')"
+        >
+          🌐 Website
+        </button>
+
+      </div>
+
+
+      <label id="inputLabel">
+        Suspicious SMS
+      </label>
+
+
+      <textarea
+        id="userInput"
+        placeholder="Paste a suspicious SMS message here..."
+        oninput="updateCount()"
+      ></textarea>
+
+
+      <div class="input-info">
+
+        <span>
+          🔒 Your content is analyzed securely
+        </span>
+
+        <span id="count">
+          0 characters
+        </span>
+
+      </div>
+
+
+      <button
+        class="analyze"
+        id="analyzeBtn"
+        onclick="analyze()"
+        disabled
+      >
+        🔍 Analyze for Safety
+      </button>
+
+
+      <p class="hint">
+        Paste something above to start your safety check.
+      </p>
+
+    </section>
+
+
+    <!-- LOADING -->
+
+    <div id="loading">
+
+      <div class="loader"></div>
+
+      Analyzing your content...
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <section id="results">
+
+      <div class="result-header">
+
+        <div>
+          <span class="label">
+            ANALYSIS RESULT
+          </span>
+
+          <h2>
+            Here's what we found
+          </h2>
+        </div>
+
+        <div id="riskBadge" class="risk-badge high">
+          🔴 High Risk
+        </div>
+
+      </div>
+
+
+      <div class="result-grid">
+
+
+        <!-- SCORE -->
+
+        <div class="card">
+
+          <span class="label">
+            RISK SCORE
+          </span>
+
+          <div
+            id="score"
+            class="score high"
+          >
+            92<small>/100</small>
+          </div>
+
+          <div class="score-bar">
+
+            <div
+              id="scoreFill"
+              class="score-fill"
+              style="width:92%; background:#e04a4a;"
+            ></div>
+
+          </div>
+
+          <p
+            id="scoreDescription"
+            class="score-description"
+          >
+            Strong signs of a potential threat.
+          </p>
+
+        </div>
+
+
+        <!-- THREAT -->
+
+        <div class="card">
+
+          <span class="label">
+            THREAT TYPE
+          </span>
+
+          <div
+            id="threat"
+            class="threat-name"
+          >
+            ⚠️ Phishing
+          </div>
+
+          <p class="score-description">
+            The analysis looks for common cybersecurity
+            indicators associated with this type of content.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- WARNING SIGNS -->
+
+      <div class="card warning-card">
+
+        <span class="label">
+          DETECTED WARNING SIGNS
+        </span>
+
+        <div
+          id="warnings"
+          class="warnings"
+        >
+
+          <div class="warning">
+            <span>!</span>
+            Creates a sense of urgency
+          </div>
+
+          <div class="warning">
+            <span>!</span>
+            Requests sensitive information
+          </div>
+
+          <div class="warning">
+            <span>!</span>
+            Contains a suspicious link
+          </div>
+
+          <div class="warning">
+            <span>!</span>
+            Uses threatening language
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- AI EXPLANATION -->
+
+      <div class="card explanation-card">
+
+        <div class="explanation">
+
+          <div class="icon">
+            🤖
+          </div>
+
+          <div>
+
+            <span class="label">
+              AI EXPLANATION
+            </span>
+
+            <p id="explanation">
+              This message shows several common phishing
+              indicators. The sender is trying to create
+              urgency and encourage you to click a link or
+              provide sensitive information.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ACTION -->
+
+      <div class="card action-card">
+
+        <div class="action">
+
+          <div class="icon">
+            💡
+          </div>
+
+          <div>
+
+            <span class="label">
+              RECOMMENDED ACTION
+            </span>
+
+            <p id="action">
+              Do not click the link. Do not share passwords,
+              OTPs, or banking details. Verify the message
+              through the organization's official website or app.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SAFETY TIPS -->
+
+    <section class="tips">
+
+      <h3>
+        🛡️ Stay safe online
+      </h3>
+
+      <div class="tip-grid">
+
+        <div class="tip">
+
+          <strong>
+            Never share OTPs
+          </strong>
+
+          <p>
+            Legitimate organizations won't ask for your OTP.
+          </p>
+
+        </div>
+
+        <div class="tip">
+
+          <strong>
+            Check the URL
+          </strong>
+
+          <p>
+            Look carefully for misspellings and strange domains.
+          </p>
+
+        </div>
+
+        <div class="tip">
+
+          <strong>
+            Don't panic
+          </strong>
+
+          <p>
+            Scammers often use urgency to make you act quickly.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    Cyber Awakening Hackathon • AI Cyber Safety Mentor
+  </footer>
+
+
+  <script>
+
+    let selectedType = "sms";
+
+
+    /* SELECT SMS / EMAIL / WEBSITE */
+
+    function selectType(type) {
+
+      selectedType = type;
+
+      const smsBtn = document.getElementById("smsBtn");
+      const emailBtn = document.getElementById("emailBtn");
+      const websiteBtn = document.getElementById("websiteBtn");
+
+      smsBtn.classList.remove("active");
+      emailBtn.classList.remove("active");
+      websiteBtn.classList.remove("active");
+
+      if (type === "sms") {
+
+        smsBtn.classList.add("active");
+
+        document.getElementById("inputLabel").innerText =
+          "Suspicious SMS";
+
+        document.getElementById("userInput").placeholder =
+          "Paste a suspicious SMS message here...";
+
+      }
+
+
+      if (type === "email") {
+
+        emailBtn.classList.add("active");
+
+        document.getElementById("inputLabel").innerText =
+          "Suspicious Email";
+
+        document.getElementById("userInput").placeholder =
+          "Paste the email content here...";
+
+      }
+
+
+      if (type === "website") {
+
+        websiteBtn.classList.add("active");
+
+        document.getElementById("inputLabel").innerText =
+          "Website URL";
+
+        document.getElementById("userInput").placeholder =
+          "Enter a website URL, e.g. https://example.com";
+
+      }
+
+
+      document.getElementById("userInput").value = "";
+
+      updateCount();
+
+      document.getElementById("results").style.display = "none";
+
+    }
+
+
+    /* CHARACTER COUNT */
+
+    function updateCount() {
+
+      const input =
+        document.getElementById("userInput");
+
+      const count =
+        document.getElementById("count");
+
+      const button =
+        document.getElementById("analyzeBtn");
+
+      count.innerText =
+        input.value.length + " characters";
+
+      button.disabled =
+        input.value.trim().length === 0;
+
+    }
+
+
+    /* MOCK ANALYSIS */
+
+    function analyze() {
+
+      const input =
+        document.getElementById("userInput").value.trim();
+
+      if (!input) return;
+
+
+      const loading =
+        document.getElementById("loading");
+
+      const results =
+        document.getElementById("results");
+
+      const analyzeBtn =
+        document.getElementById("analyzeBtn");
+
+
+      results.style.display = "none";
+
+      loading.style.display = "block";
+
+      analyzeBtn.disabled = true;
+
+
+      /*
+        MOCK BACKEND DELAY
+
+        Later this section will be replaced
+        with a fetch() REST API request.
+      */
+
+      setTimeout(function() {
+
+        let data;
+
+
+        if (selectedType === "sms") {
+
+          data = {
+
+            risk: "High",
+
+            score: 92,
+
+            threat: "Phishing",
+
+            warnings: [
+              "Creates a sense of urgency",
+              "Requests sensitive information",
+              "Contains a suspicious link",
+              "Uses threatening language"
+            ],
+
+            explanation:
+              "This message shows several common phishing indicators. The sender is trying to create urgency and encourage you to click a link or provide sensitive information.",
+
+            action:
+              "Do not click the link. Do not share passwords, OTPs, or banking details. Verify the message through the organization's official website or app."
+
+          };
+
+        }
+
+
+        else if (selectedType === "email") {
+
+          data = {
+
+            risk: "Medium",
+
+            score: 67,
+
+            threat: "Suspicious Email",
+
+            warnings: [
+              "Unexpected request",
+              "Sender identity is unclear",
+              "Pressure to take immediate action"
+            ],
+
+            explanation:
+              "The email contains some suspicious characteristics. The request should be independently verified before you respond or open any attachments.",
+
+            action:
+              "Verify the sender and contact the organization through an official channel before taking action."
+
+          };
+
+        }
+
+
+        else {
+
+          data = {
+
+            risk: "Low",
+
+            score: 18,
+
+            threat: "No Major Threat Detected",
+
+            warnings: [
+              "No obvious phishing indicators detected",
+              "URL format appears normal"
+            ],
+
+            explanation:
+              "The URL does not currently show strong indicators of a malicious or phishing website. However, automated checks cannot guarantee that a website is completely safe.",
+
+            action:
+              "Proceed cautiously. Never enter sensitive information unless you are confident that the website is legitimate."
+
+          };
+
+        }
+
+
+        showResults(data);
+
+        loading.style.display = "none";
+
+        analyzeBtn.disabled = false;
+
+      }, 1500);
+
+    }
+
+
+    /* DISPLAY RESULTS */
+
+    function showResults(data) {
+
+      const results =
+        document.getElementById("results");
+
+      const badge =
+        document.getElementById("riskBadge");
+
+      const score =
+        document.getElementById("score");
+
+      const fill =
+        document.getElementById("scoreFill");
+
+
+      results.style.display = "block";
+
+
+      /* RISK COLORS */
+
+      badge.className = "risk-badge";
+
+      score.className = "score";
+
+      fill.className = "score-fill";
+
+
+      if (data.risk === "High") {
+
+        badge.classList.add("high");
+
+        score.classList.add("high");
+
+        badge.innerText = "🔴 High Risk";
+
+        fill.style.background = "#e04a4a";
+
+      }
+
+
+      else if (data.risk === "Medium") {
+
+        badge.classList.add("medium");
+
+        score.classList.add("medium");
+
+        badge.innerText = "🟡 Medium Risk";
+
+        fill.style.background = "#e0a32c";
+
+      }
+
+
+      else {
+
+        badge.classList.add("low");
+
+        score.classList.add("low");
+
+        badge.innerText = "🟢 Low Risk";
+
+        fill.style.background = "#27a866";
+
+      }
+
+
+      /* SCORE */
+
+      score.innerHTML =
+        data.score + "<small>/100</small>";
+
+      fill.style.width =
+        data.score + "%";
+
+
+      /* THREAT */
+
+      document.getElementById("threat").innerText =
+        "⚠️ " + data.threat;
+
+
+      /* SCORE DESCRIPTION */
+
+      if (data.score >= 80) {
+
+        document.getElementById("scoreDescription").innerText =
+          "Strong signs of a potential threat.";
+
+      }
+
+      else if (data.score >= 50) {
+
+        document.getElementById("scoreDescription").innerText =
+          "Some suspicious signs were detected.";
+
+      }
+
+      else {
+
+        document.getElementById("scoreDescription").innerText =
+          "No major warning signs detected.";
+
+      }
+
+
+      /* WARNINGS */
+
+      const warnings =
+        document.getElementById("warnings");
+
+      warnings.innerHTML = "";
+
+
+      data.warnings.forEach(function(warning) {
+
+        const item =
+          document.createElement("div");
+
+        item.className = "warning";
+
+        item.innerHTML =
+          "<span>!</span>" + warning;
+
+        warnings.appendChild(item);
+
+      });
+
+
+      /* EXPLANATION */
+
+      document.getElementById("explanation").innerText =
+        data.explanation;
+
+
+      /* ACTION */
+
+      document.getElementById("action").innerText =
+        data.action;
+
+
+      /* SCROLL TO RESULTS */
+
+      results.scrollIntoView({
+        behavior: "smooth"
+      });
+
+    }
+
+  </script>
+
+</body>
+</html>
